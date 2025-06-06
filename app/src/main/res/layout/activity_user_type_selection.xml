@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:gravity="center"
+android:padding="16dp"
+android:background="@android:color/white"
+android:id="@+id/usertypeselection"
+tools:context=".UserTypeSelectionActivity">
+
+<!-- Prompt Text -->
+<TextView
+    android:id="@+id/userTypePrompt"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Please select your role"
+    android:textSize="18sp"
+    android:textColor="@android:color/black"
+    android:paddingBottom="24dp"
+    android:gravity="center"/>
+
+<!-- Student Button -->
+<Button
+    android:id="@+id/studentButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Student"
+    android:textSize="16sp"
+    android:padding="12dp"
+    android:layout_marginBottom="16dp"
+    android:backgroundTint="@color/teal_700"
+    android:textColor="@android:color/white" />
+
+<!-- Admin Button -->
+<Button
+    android:id="@+id/adminButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Admin"
+    android:textSize="16sp"
+    android:padding="12dp"
+    android:backgroundTint="@color/teal_700"
+    android:textColor="@android:color/white" />
+
+</LinearLayout>
