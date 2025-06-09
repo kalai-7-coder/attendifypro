@@ -10,9 +10,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.attendifypro2" />
-                  <option name="mobileSdkAppId" value="1:837265064511:android:3807299829b3edb92fae8a" />
-                  <option name="projectId" value="attendifypro2" />
-                  <option name="projectNumber" value="837265064511" />
+                  <option name="mobileSdkAppId" value="1:1049221381040:android:9fa5af007f52d005f3f475" />
+                  <option name="projectId" value="attendifypro-25edb" />
+                  <option name="projectNumber" value="1049221381040" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

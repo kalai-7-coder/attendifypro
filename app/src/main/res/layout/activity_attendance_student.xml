@@ -5,19 +5,116 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Text view for date -->
-    <TextView
-        android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date: "
-        android:textSize="16sp" />
-
-    <!-- Button to mark attendance (only visible for students) -->
+    <!-- Button to mark attendance (placed at the top) -->
     <Button
         android:id="@+id/markPresentButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mark Attendance" />
+        android:text="Mark Attendance"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Date Text View -->
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date: "
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:gravity="center"
+        android:background="@android:color/holo_blue_light"
+        android:textColor="@android:color/black" />
+
+    <!-- Location Verification Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/locationVerificationText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Location Verified:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical" />
+
+        <CheckBox
+            android:id="@+id/locationCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:checked="false" />
+    </LinearLayout>
+
+    <!-- Fingerprint Verification Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/fingerprintVerificationText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Fingerprint Verified:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical" />
+
+        <CheckBox
+            android:id="@+id/fingerprintCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:checked="false" />
+    </LinearLayout>
+
+    <!-- Non-Editable Latitude & Longitude Fields -->
+    <TextView
+        android:id="@+id/latitudeLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Latitude:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:paddingTop="16dp" />
+
+    <TextView
+        android:id="@+id/latitudeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Detecting..."
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:gravity="center"
+        android:background="@android:color/holo_orange_light"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/longitudeLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Longitude:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:paddingTop="16dp" />
+
+    <TextView
+        android:id="@+id/longitudeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Detecting..."
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:gravity="center"
+        android:background="@android:color/holo_orange_light"
+        android:textColor="@android:color/black" />
 
 </LinearLayout>
