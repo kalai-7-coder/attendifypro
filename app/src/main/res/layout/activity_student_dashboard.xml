@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:hint="Enter Lobby Code"
         android:textColorHint="@color/white"
+        android:textColor="@color/white"
         android:inputType="text" />
 
 

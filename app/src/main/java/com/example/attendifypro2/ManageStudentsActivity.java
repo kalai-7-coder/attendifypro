@@ -7,18 +7,18 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.graphics.Color; // ✅ Import for setting text color explicitly
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ManageStudentsActivity extends AppCompatActivity {
-    private LinearLayout studentContainer; // ✅ Use LinearLayout instead of ListView
+    private LinearLayout studentContainer;
     private Button deleteStudentButton;
-    private HashMap<String, CheckBox> studentCheckBoxes; // ✅ Track selected students
+    private HashMap<String, CheckBox> studentCheckBoxes;
     private DatabaseReference enrolledStudentsRef, usersRef;
     private String lobbyCode;
 
@@ -28,15 +28,14 @@ public class ManageStudentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manage_students);
 
         lobbyCode = getIntent().getStringExtra("LOBBY_CODE");
-        studentContainer = findViewById(R.id.studentContainer); // ✅ Updated reference
+        studentContainer = findViewById(R.id.studentContainer);
         deleteStudentButton = findViewById(R.id.deleteStudentButton);
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://attendifypro-25edb-default-rtdb.asia-southeast1.firebasedatabase.app/");
         enrolledStudentsRef = firebaseDatabase.getReference("Lobbies").child(lobbyCode).child("studentsEnrolled");
-        usersRef = firebaseDatabase.getReference("Users"); // ✅ Fetch names directly
+        usersRef = firebaseDatabase.getReference("Users");
 
         studentCheckBoxes = new HashMap<>();
-
         loadEnrolledStudents();
 
         deleteStudentButton.setOnClickListener(v -> removeSelectedStudents());
@@ -46,14 +45,13 @@ public class ManageStudentsActivity extends AppCompatActivity {
         enrolledStudentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                studentContainer.removeAllViews(); // ✅ Clear previous entries
+                studentContainer.removeAllViews();
                 studentCheckBoxes.clear();
 
                 if (snapshot.exists()) {
                     for (DataSnapshot studentSnapshot : snapshot.getChildren()) {
                         String studentId = studentSnapshot.getKey();
 
-                        // ✅ Fetch name from Users node
                         usersRef.child(studentId).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot nameSnapshot) {
@@ -64,6 +62,8 @@ public class ManageStudentsActivity extends AppCompatActivity {
                                     // ✅ Create dynamic checkbox
                                     CheckBox checkBox = new CheckBox(ManageStudentsActivity.this);
                                     checkBox.setText(displayText);
+                                    checkBox.setTextColor(Color.WHITE); // ✅ Explicitly set text color to white
+
                                     checkBox.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
                                         if (isChecked) {
                                             studentCheckBoxes.put(studentId, checkBox);
@@ -72,7 +72,6 @@ public class ManageStudentsActivity extends AppCompatActivity {
                                         }
                                     });
 
-                                    // ✅ Add checkbox to layout
                                     studentContainer.addView(checkBox);
                                 }
                             }
@@ -108,7 +107,7 @@ public class ManageStudentsActivity extends AppCompatActivity {
                     userRef.removeValue().addOnCompleteListener(userTask -> {
                         if (userTask.isSuccessful()) {
                             Toast.makeText(ManageStudentsActivity.this, "Selected students removed successfully!", Toast.LENGTH_SHORT).show();
-                            loadEnrolledStudents(); // ✅ Refresh list after deletion
+                            loadEnrolledStudents();
                         } else {
                             Toast.makeText(ManageStudentsActivity.this, "Failed to remove student from joined lobbies.", Toast.LENGTH_SHORT).show();
                         }

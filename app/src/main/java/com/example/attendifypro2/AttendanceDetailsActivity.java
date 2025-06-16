@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
     private ListView studentListView;
     private Button manageStudentsButton;
     private ArrayList<String> studentList;
-    private ArrayAdapter<String> studentAdapter;
+    private StudentListAdapter studentAdapter;
     private DatabaseReference attendanceRef, enrolledStudentsRef, usersRef;
     private String lobbyCode, selectedDate;
 
@@ -47,10 +46,10 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://attendifypro-25edb-default-rtdb.asia-southeast1.firebasedatabase.app/");
         attendanceRef = firebaseDatabase.getReference("Lobbies").child(lobbyCode).child("attendance").child(selectedDate);
         enrolledStudentsRef = firebaseDatabase.getReference("Lobbies").child(lobbyCode).child("studentsEnrolled");
-        usersRef = firebaseDatabase.getReference("Users"); // ✅ Reference to Users node for fetching names
+        usersRef = firebaseDatabase.getReference("Users");
 
         studentList = new ArrayList<>();
-        studentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, studentList);
+        studentAdapter = new StudentListAdapter(this, studentList); // Use custom adapter
         studentListView.setAdapter(studentAdapter);
 
         loadAttendanceDetails();
@@ -79,7 +78,6 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
                         for (DataSnapshot student : presentSnapshot.getChildren()) {
                             String studentId = student.getKey();
 
-                            // ✅ Fetch student name from Users node
                             usersRef.child(studentId).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot nameSnapshot) {
@@ -103,7 +101,6 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
                         for (DataSnapshot student : absentSnapshot.getChildren()) {
                             String studentId = student.getKey();
 
-                            // ✅ Fetch student name from Users node
                             usersRef.child(studentId).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot nameSnapshot) {
@@ -126,7 +123,6 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
                     Toast.makeText(AttendanceDetailsActivity.this, "No attendance records found for this date.", Toast.LENGTH_SHORT).show();
                 }
 
-                // Fetch total enrolled students
                 enrolledStudentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
