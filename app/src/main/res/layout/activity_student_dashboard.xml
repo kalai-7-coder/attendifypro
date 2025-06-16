@@ -4,27 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background3"
     android:orientation="vertical"
     android:padding="16dp">
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Student Dashboard"
+        android:textSize="32sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
 
     <EditText
         android:id="@+id/lobbyCodeInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Lobby Code"
+        android:textColorHint="@color/white"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/userNameInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Your Name"
-        android:inputType="text" />
 
     <Button
         android:id="@+id/joinLobbyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="24dp"
         android:text="Join Lobby" />
 
     <androidx.recyclerview.widget.RecyclerView

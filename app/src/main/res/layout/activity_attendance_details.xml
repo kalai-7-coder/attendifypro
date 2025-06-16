@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background3"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Date Display -->
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Attendance for: "
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Attendance Details -->
+    <TextView
+        android:id="@+id/totalEnrolledTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Enrolled: "
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/presentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="Present: "
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/absentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Absent: "
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- ListView for Present Students -->
+    <ListView
+        android:id="@+id/studentListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"/>
+
+    <!-- Manage Enrolled Students -->
+    <Button
+        android:id="@+id/manageStudentsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Click here to view or edit enrolled students"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
+</LinearLayout>

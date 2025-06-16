@@ -7,7 +7,7 @@ android:layout_height="match_parent"
 android:orientation="vertical"
 android:gravity="center"
 android:padding="16dp"
-android:background="@android:color/white"
+android:background="@drawable/background2"
 android:id="@+id/usertypeselection"
 tools:context=".UserTypeSelectionActivity">
 
@@ -18,7 +18,8 @@ tools:context=".UserTypeSelectionActivity">
     android:layout_height="wrap_content"
     android:text="Please select your role"
     android:textSize="18sp"
-    android:textColor="@android:color/black"
+    android:textColor="@android:color/white"
+    android:textStyle="bold"
     android:paddingBottom="24dp"
     android:gravity="center"/>
 
@@ -31,8 +32,8 @@ tools:context=".UserTypeSelectionActivity">
     android:textSize="16sp"
     android:padding="12dp"
     android:layout_marginBottom="16dp"
-    android:backgroundTint="@color/teal_700"
-    android:textColor="@android:color/white" />
+    android:backgroundTint="@color/white"
+    android:textColor="@android:color/black" />
 
 <!-- Admin Button -->
 <Button
@@ -42,7 +43,7 @@ tools:context=".UserTypeSelectionActivity">
     android:text="Admin"
     android:textSize="16sp"
     android:padding="12dp"
-    android:backgroundTint="@color/teal_700"
-    android:textColor="@android:color/white" />
+    android:backgroundTint="@color/white"
+    android:textColor="@android:color/black" />
 
 </LinearLayout>

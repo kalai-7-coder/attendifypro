@@ -10,12 +10,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Lobby Code"
+        android:textColor="@color/white"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingBottom="4dp"/>
 
     <TextView
-        android:id="@+id/user_name_text"
+        android:id="@+id/lobby_name_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Name" />
+        android:text="Lobby Name"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>  <!-- ✅ Improved readability -->
 </LinearLayout>

@@ -4,7 +4,7 @@
     android:id="@+id/loginpage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_200"
+    android:background="@drawable/background1"
     android:orientation="vertical"
     android:padding="40dp"
     tools:context=".LoginPage">
@@ -75,6 +75,7 @@
             android:layout_height="wrap_content"
             android:text="Don't have an account?"
             android:textSize="15sp"
+            android:textColor="@color/white"
             android:textStyle="bold"/>
 
         <TextView

@@ -14,7 +14,7 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
 
     private Context context;
     private List<Lobby> lobbyList;
-    private String userType; // Add userType to pass as an extra
+    private String userType;
 
     public LobbyAdapter(Context context, List<Lobby> lobbyList) {
         this.context = context;
@@ -38,11 +38,17 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
         holder.lobbyNameTextView.setText(lobby.getLobbyName());
         holder.lobbyCodeTextView.setText("Code: " + lobby.getLobbyCode());
 
-        // Set an OnClickListener on each lobby item
+        // Set click listener with dynamic navigation based on user type
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(context, AttendanceActivity.class);
+            Intent intent;
+
+            if ("admin".equalsIgnoreCase(userType)) {
+                intent = new Intent(context, AdminAttendanceActivity.class); // Admin goes here
+            } else {
+                intent = new Intent(context, AttendanceActivity.class); // Students go here
+            }
+
             intent.putExtra("LOBBY_CODE", lobby.getLobbyCode());
-            intent.putExtra("USER_TYPE", userType); // Pass the userType dynamically
             context.startActivity(intent);
         });
     }

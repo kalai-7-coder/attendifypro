@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background2"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Manage Students Header -->
+    <TextView
+        android:id="@+id/manageStudentsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manage Enrolled Students"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- ScrollView for Student List with Checkboxes -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:contentDescription="Student List">
+
+        <LinearLayout
+            android:id="@+id/studentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </ScrollView>
+
+    <!-- Delete Student Button -->
+    <Button
+        android:id="@+id/deleteStudentButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove Selected Students"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
+</LinearLayout>

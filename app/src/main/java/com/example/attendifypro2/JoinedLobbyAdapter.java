@@ -31,7 +31,7 @@ public class JoinedLobbyAdapter extends RecyclerView.Adapter<JoinedLobbyAdapter.
         Lobby lobby = lobbyList.get(position);
         // Set the lobby code and the user name
         holder.lobbyCodeTextView.setText("Lobby Code: " + lobby.getLobbyCode());
-        holder.userNameTextView.setText("User Name: " + lobby.getLobbyName()); // User's name stored as lobby name
+        holder.lobbyNameTextView.setText("Lobby Name: "+ lobby.getLobbyName());
     }
 
     @Override
@@ -41,12 +41,12 @@ public class JoinedLobbyAdapter extends RecyclerView.Adapter<JoinedLobbyAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView lobbyCodeTextView;
-        TextView userNameTextView;
+        TextView lobbyNameTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             lobbyCodeTextView = itemView.findViewById(R.id.lobby_code_text);
-            userNameTextView = itemView.findViewById(R.id.user_name_text);
+            lobbyNameTextView= itemView.findViewById(R.id.lobby_name_text);
         }
     }
 }

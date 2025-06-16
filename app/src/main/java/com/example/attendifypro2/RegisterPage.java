@@ -1,95 +1,153 @@
 package com.example.attendifypro2;
 
+import static java.sql.Types.NULL;
+
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.text.TextPaint;
+import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.View;
+import android.util.Base64;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 public class RegisterPage extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword;
+    private EditText editTextEmail, editTextPassword;
+    private EditText editTextName;
+    private Button signUp, captureFaceButton;
+    private TextView signIn;
+    private ImageView facePreview;
 
-    Button signUp ;
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
+    private Bitmap capturedImage;
 
-    TextView signIn;
-
-    FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();
+    private static final int CAMERA_REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register_page);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance("https://attendifypro-25edb-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("Users");  // ✅ Updated reference
 
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
+        editTextName = findViewById(R.id.name);
         signUp = findViewById(R.id.register);
         signIn = findViewById(R.id.login);
+        captureFaceButton = findViewById(R.id.captureFaceButton);
+        facePreview = findViewById(R.id.facePreview);
 
-        signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(RegisterPage.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        signIn.setOnClickListener(view -> {
+            Intent intent = new Intent(RegisterPage.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
 
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email, password;
-                email = String .valueOf(editTextEmail.getText());
-                password = String.valueOf(editTextPassword.getText());
+        captureFaceButton.setOnClickListener(view -> captureImage());
 
-                if(TextUtils.isEmpty(email))
-                {
-                    Toast.makeText(RegisterPage.this , "Enter Email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(password))
-                {
-                    Toast.makeText(RegisterPage.this , "Enter password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        signUp.setOnClickListener(view -> registerUser());
+    }
 
-                firebaseAuth.createUserWithEmailAndPassword(email,password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful())
-                                {
-                                    Toast.makeText(RegisterPage.this , "Registration successful",Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(RegisterPage.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                                else{
-                                    Toast.makeText(RegisterPage.this,"Registration Failed", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+    private void captureImage() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+            return;
+        }
 
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+    }
 
-            }
-        });
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            capturedImage = (Bitmap) data.getExtras().get("data");
+            facePreview.setImageBitmap(capturedImage);
+        }
+    }
+
+    private void registerUser() {
+        String email = String.valueOf(editTextEmail.getText());
+        String password = String.valueOf(editTextPassword.getText());
+        String name = String.valueOf(editTextName.getText());
+
+        if (!validateInput(email, password, name)) return;
+
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String userId = firebaseAuth.getCurrentUser().getUid();
+                        saveUserProfile(userId, email, name);
+                        if (capturedImage != null) storeFaceImage(userId, capturedImage);
+
+                        Toast.makeText(RegisterPage.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(RegisterPage.this, MainActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(RegisterPage.this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private boolean validateInput(String email, String password,String name) {
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(this, "Enter Email", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(name)) {
+            Toast.makeText(this, "Enter Name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Enter a valid Email", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(password) || password.length() < 6) {
+            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void storeFaceImage(String userId, Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+
+        databaseReference.child(userId).child("faceImage").setValue(encodedImage)
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Face image stored successfully!", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to save image data.", Toast.LENGTH_SHORT).show());
+    }
+
+    private void saveUserProfile(String userId, String email, String name) {
+        databaseReference.child(userId).child("name").setValue(name);
+        databaseReference.child(userId).child("email").setValue(email);
+        databaseReference.child(userId).child("joinedLobbies").setValue(new ArrayList<>());
+        databaseReference.child(userId).child("createdLobbies").setValue(new ArrayList<>());
+        // ✅ Added default role
     }
 }

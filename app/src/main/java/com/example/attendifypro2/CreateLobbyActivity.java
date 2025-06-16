@@ -1,32 +1,35 @@
 package com.example.attendifypro2;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.*;
+
+import com.google.android.gms.location.*;
+
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class CreateLobbyActivity extends AppCompatActivity {
 
-    private EditText lobbyNameEditText;
-    private EditText latitudeEditText;
-    private EditText longitudeEditText;
+    private EditText lobbyNameEditText, latitudeEditText, longitudeEditText;
+    private EditText fromDateEditText, toDateEditText, studentLimitEditText;
     private Button createLobbyButton;
-    private DatabaseReference lobbiesRef;
+
+    private DatabaseReference lobbiesRef, usersRef;
     private FirebaseAuth firebaseAuth;
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -38,77 +41,116 @@ public class CreateLobbyActivity extends AppCompatActivity {
         lobbyNameEditText = findViewById(R.id.lobbyNameEditText);
         latitudeEditText = findViewById(R.id.latitudeEditText);
         longitudeEditText = findViewById(R.id.longitudeEditText);
+        fromDateEditText = findViewById(R.id.fromDateEditText);
+        toDateEditText = findViewById(R.id.toDateEditText);
+        studentLimitEditText = findViewById(R.id.studentLimitEditText);
         createLobbyButton = findViewById(R.id.createLobbyButton);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance(
-                "https://attendifypro-25edb-default-rtdb.asia-southeast1.firebasedatabase.app/"
-        );
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://attendifypro-25edb-default-rtdb.asia-southeast1.firebasedatabase.app/");
         lobbiesRef = database.getReference("Lobbies");
+        usersRef = database.getReference("Users");
 
-        // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Step 1: Auto-detect location on startup
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else {
-            fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-                if (location != null) {
-                    latitudeEditText.setText(String.valueOf(location.getLatitude()));
-                    longitudeEditText.setText(String.valueOf(location.getLongitude()));
-                }
-            });
-        }
+        requestLocationUpdates();
+
+        // ✅ Restored Calendar functionality
+        fromDateEditText.setOnClickListener(v -> showDatePicker(fromDateEditText));
+        toDateEditText.setOnClickListener(v -> showDatePicker(toDateEditText));
 
         createLobbyButton.setOnClickListener(v -> createLobby());
     }
+
+    private void requestLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(5000);
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null) {
+                    Location location = locationResult.getLastLocation();
+                    if (location != null) {
+                        latitudeEditText.setText(String.valueOf(location.getLatitude()));
+                        longitudeEditText.setText(String.valueOf(location.getLongitude()));
+                        System.out.println("Latitude: " + location.getLatitude());
+                        System.out.println("Longitude: " + location.getLongitude());
+                    } else {
+                        System.out.println("Location is NULL");
+                    }
+                }
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+    private void showDatePicker(EditText targetEditText) {
+        Calendar calendar = Calendar.getInstance();
+        new DatePickerDialog(this,
+                (view, year, month, dayOfMonth) -> {
+                    String date = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year);
+                    targetEditText.setText(date);
+                    System.out.println("Date Selected: " + date);  // ✅ Debugging log
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
+    }
+
     private void createLobby() {
         String lobbyName = lobbyNameEditText.getText().toString().trim();
+        String fromDate = fromDateEditText.getText().toString().trim();
+        String toDate = toDateEditText.getText().toString().trim();
+        String studentLimit = studentLimitEditText.getText().toString().trim();
 
-        if (TextUtils.isEmpty(lobbyName)) {
-            Toast.makeText(this, "Please enter a lobby name", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(lobbyName) || TextUtils.isEmpty(fromDate) || TextUtils.isEmpty(toDate) || TextUtils.isEmpty(studentLimit)) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Check for location permissions
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        double latitude = Double.parseDouble(latitudeEditText.getText().toString());
+        double longitude = Double.parseDouble(longitudeEditText.getText().toString());
 
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        if (latitude == 0.0 || longitude == 0.0) {
+            Toast.makeText(this, "Location not detected! Wait or retry.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Get the user's current location
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
+        String lobbyCode = UUID.randomUUID().toString().substring(0, 6);
+        String adminId = firebaseAuth.getCurrentUser().getUid();
 
-                            // Generate lobby code
-                            String lobbyCode = UUID.randomUUID().toString().substring(0, 6);
-                            String adminId = firebaseAuth.getCurrentUser().getUid();
+        HashMap<String, Object> lobbyData = new HashMap<>();
+        lobbyData.put("lobbyName", lobbyName);
+        lobbyData.put("lobbyCode", lobbyCode);
+        lobbyData.put("latitude", latitude);
+        lobbyData.put("longitude", longitude);
+        lobbyData.put("fromDate", fromDate);
+        lobbyData.put("toDate", toDate);
+        lobbyData.put("studentLimit", Integer.parseInt(studentLimit));
+        lobbyData.put("studentsEnrolled", new HashMap<>());
+        lobbyData.put("attendance", new HashMap<>());
+        lobbyData.put("studentsAbsent", new HashMap<>());
+        lobbyData.put("studentsPresent", new HashMap<>());
 
-                            // Create lobby object with location
-                            Lobby lobby = new Lobby(lobbyName, lobbyCode, adminId, latitude, longitude);
-
-                            lobbiesRef.child(lobbyCode).setValue(lobby)
-                                    .addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(CreateLobbyActivity.this, "Lobby created successfully!", Toast.LENGTH_SHORT).show();
-                                            finish();
-                                        } else {
-                                            Toast.makeText(CreateLobbyActivity.this, "Failed to create lobby. Try again.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        } else {
-                            Toast.makeText(CreateLobbyActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        lobbiesRef.child(lobbyCode).setValue(lobbyData).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                usersRef.child(adminId).child("createdLobbies").child(lobbyCode).setValue(true);
+                Toast.makeText(this, "Lobby created successfully! Code: " + lobbyCode, Toast.LENGTH_LONG).show();
+                finish();
+            } else {
+                String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                Toast.makeText(this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+                System.out.println("Firebase Error: " + errorMessage);
+            }
+        });
     }
 }

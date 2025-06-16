@@ -1,52 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/createlobbyactivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".CreateLobbyActivity">
+    android:background="@drawable/background3"
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/lobbyNameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="12dp"
-        android:hint="Enter Lobby Name"
-        android:inputType="text" />
-
-    <TextView
-        android:id="@+id/locationTextView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Detected Location:"
-        android:textSize="16sp"
-        android:textColor="@android:color/black" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/latitudeEditText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="12dp"
-        android:hint="Latitude"
-        android:inputType="numberDecimal" />
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LOBBY CREATION"
+            android:textSize="32sp"
+            android:textColor="@color/white"
+            android:layout_marginStart="40dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
 
-    <EditText
-        android:id="@+id/longitudeEditText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="12dp"
-        android:hint="Longitude"
-        android:inputType="numberDecimal" />
+        <TextView
+            android:id="@+id/description_createlobby"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter the below details to create new lobby"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/createLobbyButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Create Lobby" />
+        <EditText
+            android:id="@+id/lobbyNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="12dp"
+            android:hint="Enter Lobby Name"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:inputType="text" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:layout_marginTop="12dp"
+            android:text="Detected Location:"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/latitudeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="12dp"
+            android:hint="Latitude"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:inputType="numberDecimal"
+            android:enabled="false" />
+
+        <EditText
+            android:id="@+id/longitudeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="12dp"
+            android:hint="Longitude"
+            android:inputType="numberDecimal"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:enabled="false" />
+
+        <EditText
+            android:id="@+id/fromDateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:hint="From Date (DD/MM/YYYY)"
+            android:focusable="false"
+            android:clickable="true" />
+
+        <EditText
+            android:id="@+id/toDateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:padding="12dp"
+            android:hint="To Date (DD/MM/YYYY)"
+            android:focusable="false"
+            android:clickable="true" />
+
+        <EditText
+            android:id="@+id/studentLimitEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="12dp"
+            android:hint="Enter number of students"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/createLobbyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="24dp"
+            android:text="Create Lobby" />
+    </LinearLayout>
+</ScrollView>
