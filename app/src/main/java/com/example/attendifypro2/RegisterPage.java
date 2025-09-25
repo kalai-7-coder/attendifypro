@@ -24,6 +24,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.face.FaceDetection;
+import com.google.mlkit.vision.face.FaceDetector;
+import com.google.mlkit.vision.face.FaceDetectorOptions;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -34,11 +38,11 @@ public class RegisterPage extends AppCompatActivity {
     private EditText editTextName;
     private Button signUp, captureFaceButton;
     private TextView signIn;
-    private ImageView facePreview;
+    //private ImageView facePreview;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-    private Bitmap capturedImage;
+    //private Bitmap capturedImage;
 
     private static final int CAMERA_REQUEST_CODE = 101;
 
@@ -56,8 +60,8 @@ public class RegisterPage extends AppCompatActivity {
         editTextName = findViewById(R.id.name);
         signUp = findViewById(R.id.register);
         signIn = findViewById(R.id.login);
-        captureFaceButton = findViewById(R.id.captureFaceButton);
-        facePreview = findViewById(R.id.facePreview);
+        //captureFaceButton = findViewById(R.id.captureFaceButton);
+        //facePreview = findViewById(R.id.facePreview);
 
         signIn.setOnClickListener(view -> {
             Intent intent = new Intent(RegisterPage.this, MainActivity.class);
@@ -65,30 +69,53 @@ public class RegisterPage extends AppCompatActivity {
             finish();
         });
 
-        captureFaceButton.setOnClickListener(view -> captureImage());
+        //captureFaceButton.setOnClickListener(view -> captureImage());
 
         signUp.setOnClickListener(view -> registerUser());
     }
 
-    private void captureImage() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-            return;
-        }
+//    private void captureImage() {
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+//            return;
+//        }
+//
+//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//            capturedImage = (Bitmap) data.getExtras().get("data");
+//            detectFaceBeforeSaving(capturedImage);
+//            //facePreview.setImageBitmap(capturedImage);
+//        }
+//    }
+    // Add this method to run face detection before saving:
+//    private void detectFaceBeforeSaving(Bitmap bitmap) {
+//        InputImage image = InputImage.fromBitmap(bitmap, 0);
+//        FaceDetector detector = FaceDetection.getClient(
+//                new FaceDetectorOptions.Builder()
+//                        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+//                        .build()
+//        );
+//
+//        detector.process(image)
+//                .addOnSuccessListener(faces -> {
+//                    if (!faces.isEmpty()) {
+//                        facePreview.setImageBitmap(bitmap);
+//                        capturedImage = bitmap;
+//                        Toast.makeText(this, "Face detected and ready for upload!", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(this, "No face detected. Please try again.", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(e -> Toast.makeText(this, "Face detection failed.", Toast.LENGTH_SHORT).show());
+//    }
 
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            capturedImage = (Bitmap) data.getExtras().get("data");
-            facePreview.setImageBitmap(capturedImage);
-        }
-    }
 
     private void registerUser() {
         String email = String.valueOf(editTextEmail.getText());
@@ -102,7 +129,7 @@ public class RegisterPage extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         String userId = firebaseAuth.getCurrentUser().getUid();
                         saveUserProfile(userId, email, name);
-                        if (capturedImage != null) storeFaceImage(userId, capturedImage);
+                        //if (capturedImage != null) storeFaceImage(userId, capturedImage);
 
                         Toast.makeText(RegisterPage.this, "Registration successful!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(RegisterPage.this, MainActivity.class));

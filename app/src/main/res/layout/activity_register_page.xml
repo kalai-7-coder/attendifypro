@@ -59,25 +59,25 @@
             android:background="@android:color/transparent"
             android:layout_marginTop="20dp"/>
 
-        <!-- Capture Face Image Button -->
-        <Button
-            android:id="@+id/captureFaceButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:text="Capture Face Image"
-            android:layout_marginTop="30dp"/>
+<!--        &lt;!&ndash; Capture Face Image Button &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/captureFaceButton"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="20dp"-->
+<!--            android:text="Capture Face Image"-->
+<!--            android:layout_marginTop="30dp"/>-->
 
-        <!-- ImageView to Show Captured Face -->
-        <ImageView
-            android:id="@+id/facePreview"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="20dp"
-            android:scaleType="centerCrop"
-            android:background="@color/white"
-            android:contentDescription="Face Preview"/>
+<!--        &lt;!&ndash; ImageView to Show Captured Face &ndash;&gt;-->
+<!--        <ImageView-->
+<!--            android:id="@+id/facePreview"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="200dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:background="@color/white"-->
+<!--            android:contentDescription="Face Preview"/>-->
 
         <!-- Register Button -->
         <LinearLayout

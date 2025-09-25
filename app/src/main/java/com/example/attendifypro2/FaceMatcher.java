@@ -5,32 +5,26 @@ import android.graphics.Color;
 
 public class FaceMatcher {
     public static boolean compareFaces(Bitmap face1, Bitmap face2, int confidenceThreshold) {
-        int width1 = face1.getWidth();
-        int height1 = face1.getHeight();
-        int width2 = face2.getWidth();
-        int height2 = face2.getHeight();
+        int size = 100;
+        Bitmap resized1 = Bitmap.createScaledBitmap(face1, size, size, false);
+        Bitmap resized2 = Bitmap.createScaledBitmap(face2, size, size, false);
 
-        if (width1 != width2 || height1 != height2) {
-            return false; // Faces must have the same resolution
-        }
+        long totalDiff = 0;
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                int p1 = resized1.getPixel(x, y);
+                int p2 = resized2.getPixel(x, y);
 
-        int matchedPixels = 0;
-        int totalPixels = width1 * height1;
+                int rDiff = Math.abs(Color.red(p1) - Color.red(p2));
+                int gDiff = Math.abs(Color.green(p1) - Color.green(p2));
+                int bDiff = Math.abs(Color.blue(p1) - Color.blue(p2));
 
-        for (int x = 0; x < width1; x++) {
-            for (int y = 0; y < height1; y++) {
-                int pixel1 = face1.getPixel(x, y);
-                int pixel2 = face2.getPixel(x, y);
-
-                if (Color.red(pixel1) == Color.red(pixel2) &&
-                        Color.green(pixel1) == Color.green(pixel2) &&
-                        Color.blue(pixel1) == Color.blue(pixel2)) {
-                    matchedPixels++;
-                }
+                totalDiff += rDiff + gDiff + bDiff;
             }
         }
 
-        int matchPercentage = (matchedPixels * 100) / totalPixels;
-        return matchPercentage >= confidenceThreshold;
+        long maxDiff = 255L * 3 * size * size;
+        int similarity = 100 - (int) ((totalDiff * 100) / maxDiff);
+        return similarity >= confidenceThreshold;
     }
 }

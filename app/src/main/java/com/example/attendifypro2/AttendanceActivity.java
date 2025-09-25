@@ -24,6 +24,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.face.FaceDetection;
+import com.google.mlkit.vision.face.FaceDetector;
+import com.google.mlkit.vision.face.FaceDetectorOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +38,8 @@ public class AttendanceActivity extends AppCompatActivity {
 
     private TextView dateTextView, latitudeTextView, longitudeTextView;
     private Button markPresentButton;
-    private CheckBox locationCheckBox, fingerprintCheckBox, facialCheckBox;
+    private CheckBox locationCheckBox, fingerprintCheckBox;
+//    private CheckBox facialCheckBox;
 
     private String lobbyCode;
     private FirebaseAuth firebaseAuth;
@@ -58,7 +63,7 @@ public class AttendanceActivity extends AppCompatActivity {
         markPresentButton = findViewById(R.id.markPresentButton);
         locationCheckBox = findViewById(R.id.locationCheckBox);
         fingerprintCheckBox = findViewById(R.id.fingerprintCheckBox);
-        facialCheckBox = findViewById(R.id.facialCheckBox);
+//        facialCheckBox = findViewById(R.id.facialCheckBox);
         latitudeTextView = findViewById(R.id.latitudeTextView);
         longitudeTextView = findViewById(R.id.longitudeTextView);
 
@@ -121,7 +126,7 @@ public class AttendanceActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
                 fingerprintCheckBox.setChecked(true);
-                captureImage();
+//                captureImage();
                 //facialCheckBox.setChecked(true);
                 saveAttendance();
             }
@@ -141,22 +146,37 @@ public class AttendanceActivity extends AppCompatActivity {
         biometricPrompt.authenticate(promptInfo);
     }
 
-    private void captureImage() {
-        startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE);
-    }
+//    private void captureImage() {
+//        startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE);
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//            capturedImage = (Bitmap) data.getExtras().get("data");
+//            authenticateFace(capturedImage);
+//        }
+//    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            capturedImage = (Bitmap) data.getExtras().get("data");
-            authenticateFace(capturedImage);
-        }
-    }
-
-    private void authenticateFace(Bitmap capturedBitmap) {
-        compareFaces();
-    }
+//    private void authenticateFace(Bitmap capturedBitmap) {
+//        InputImage image = InputImage.fromBitmap(capturedBitmap, 0);
+//        FaceDetector detector = FaceDetection.getClient(
+//                new FaceDetectorOptions.Builder()
+//                        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+//                        .build()
+//        );
+//
+//        detector.process(image)
+//                .addOnSuccessListener(faces -> {
+//                    if (!faces.isEmpty()) {
+//                        retrieveStoredFaceImage(); // continue to fetch & compare
+//                    } else {
+//                        Toast.makeText(this, "No face detected. Try again.", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(e -> Toast.makeText(this, "Face detection failed.", Toast.LENGTH_SHORT).show());
+//    }
 
 //    private void retrieveStoredFaceImage() {
 //        String userId = firebaseAuth.getCurrentUser().getUid();
@@ -184,18 +204,19 @@ public class AttendanceActivity extends AppCompatActivity {
 //    }
 
 //    private void compareFaces(Bitmap storedBitmap) {
-        private void compareFaces(){
+//        private void compareFaces(Bitmap storedBitmap){
 //        boolean isMatch = FaceMatcher.compareFaces(capturedImage, storedBitmap, 85);
 //        if (isMatch) {
-            facialCheckBox.setChecked(true);
-            saveAttendance();
+//            facialCheckBox.setChecked(true);
+//            saveAttendance();
 //        } else {
 //            Toast.makeText(this, "Face mismatch.", Toast.LENGTH_SHORT).show();
 //        }
-    }
+//    }
 
     private void saveAttendance() {
-        if (!locationCheckBox.isChecked() || !fingerprintCheckBox.isChecked() || !facialCheckBox.isChecked()) {
+        if (!locationCheckBox.isChecked() || !fingerprintCheckBox.isChecked()) {
+            //if (!locationCheckBox.isChecked() || !fingerprintCheckBox.isChecked() || !facialCheckBox.isChecked()) {
             Toast.makeText(this, "Verification failed!", Toast.LENGTH_SHORT).show();
             return;
         }
