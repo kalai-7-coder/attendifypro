@@ -117,13 +117,36 @@ public class CreateLobbyActivity extends AppCompatActivity {
             return;
         }
 
-        double latitude = Double.parseDouble(latitudeEditText.getText().toString());
-        double longitude = Double.parseDouble(longitudeEditText.getText().toString());
+        // ✅ FIX: Check if latitude/longitude fields are empty BEFORE parsing
+        String latStr = latitudeEditText.getText().toString().trim();
+        String lngStr = longitudeEditText.getText().toString().trim();
 
+        // Check if fields are empty or still showing placeholder text
+        if (TextUtils.isEmpty(latStr) || TextUtils.isEmpty(lngStr) ||
+                "Detecting...".equals(latStr) || "Detecting...".equals(lngStr)) {
+            Toast.makeText(this, "⏳ Please wait for location to be detected...", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // ✅ FIX: Use try-catch to handle parsing errors gracefully
+        double latitude, longitude;
+        try {
+            latitude = Double.parseDouble(latStr);
+            longitude = Double.parseDouble(lngStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "❌ Invalid location data. Please wait for GPS...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // ✅ Additional validation: Check if coordinates are valid
         if (latitude == 0.0 || longitude == 0.0) {
             Toast.makeText(this, "Location not detected! Wait or retry.", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // ✅ Show progress to user
+        createLobbyButton.setEnabled(false);
+        createLobbyButton.setText("Creating Lobby...");
 
         String lobbyCode = UUID.randomUUID().toString().substring(0, 6);
         String adminId = firebaseAuth.getCurrentUser().getUid();
@@ -142,13 +165,17 @@ public class CreateLobbyActivity extends AppCompatActivity {
         lobbyData.put("studentsPresent", new HashMap<>());
 
         lobbiesRef.child(lobbyCode).setValue(lobbyData).addOnCompleteListener(task -> {
+            // ✅ Re-enable button
+            createLobbyButton.setEnabled(true);
+            createLobbyButton.setText("Create Lobby");
+
             if (task.isSuccessful()) {
                 usersRef.child(adminId).child("createdLobbies").child(lobbyCode).setValue(true);
-                Toast.makeText(this, "Lobby created successfully! Code: " + lobbyCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "✅ Lobby created successfully! Code: " + lobbyCode, Toast.LENGTH_LONG).show();
                 finish();
             } else {
                 String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                Toast.makeText(this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "❌ Error: " + errorMessage, Toast.LENGTH_SHORT).show();
                 System.out.println("Firebase Error: " + errorMessage);
             }
         });

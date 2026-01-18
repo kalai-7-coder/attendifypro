@@ -17,11 +17,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AttendanceDetailsActivity extends AppCompatActivity {
     private TextView dateTextView, totalEnrolledTextView, presentTextView, absentTextView;
     private ListView studentListView;
-    private Button manageStudentsButton;
+    private Button manageStudentsButton, leaveApprovalButton, securityAlertsButton, generateReportButton;
     private ArrayList<String> studentList;
     private StudentListAdapter studentAdapter;
-    private DatabaseReference attendanceRef, enrolledStudentsRef, usersRef;
-    private String lobbyCode, selectedDate;
+    private DatabaseReference attendanceRef, enrolledStudentsRef, usersRef, lobbyRef;
+    private String lobbyCode, selectedDate, lobbyName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,9 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
         absentTextView = findViewById(R.id.absentTextView);
         studentListView = findViewById(R.id.studentListView);
         manageStudentsButton = findViewById(R.id.manageStudentsButton);
+        leaveApprovalButton = findViewById(R.id.leaveApprovalButton);
+        securityAlertsButton = findViewById(R.id.securityAlertsButton);
+        generateReportButton = findViewById(R.id.generateReportButton);
 
         dateTextView.setText("Attendance for: " + selectedDate);
 
@@ -47,9 +50,25 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
         attendanceRef = firebaseDatabase.getReference("Lobbies").child(lobbyCode).child("attendance").child(selectedDate);
         enrolledStudentsRef = firebaseDatabase.getReference("Lobbies").child(lobbyCode).child("studentsEnrolled");
         usersRef = firebaseDatabase.getReference("Users");
+        lobbyRef = firebaseDatabase.getReference("Lobbies").child(lobbyCode);
+
+        // Fetch lobby name
+        lobbyRef.child("lobbyName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    lobbyName = snapshot.getValue(String.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                lobbyName = "Unknown Lobby";
+            }
+        });
 
         studentList = new ArrayList<>();
-        studentAdapter = new StudentListAdapter(this, studentList); // Use custom adapter
+        studentAdapter = new StudentListAdapter(this, studentList);
         studentListView.setAdapter(studentAdapter);
 
         loadAttendanceDetails();
@@ -58,6 +77,28 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
         manageStudentsButton.setOnClickListener(v -> {
             Intent intent = new Intent(AttendanceDetailsActivity.this, ManageStudentsActivity.class);
             intent.putExtra("LOBBY_CODE", lobbyCode);
+            startActivity(intent);
+        });
+
+        // Navigate to LeaveApprovalActivity
+        leaveApprovalButton.setOnClickListener(v -> {
+            Intent intent = new Intent(AttendanceDetailsActivity.this, LeaveApprovalActivity.class);
+            intent.putExtra("LOBBY_CODE", lobbyCode);
+            startActivity(intent);
+        });
+
+        // Navigate to SecurityAlertsActivity
+        securityAlertsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(AttendanceDetailsActivity.this, SecurityAlertsActivity.class);
+            intent.putExtra("LOBBY_CODE", lobbyCode);
+            startActivity(intent);
+        });
+
+        // Navigate to ReportGeneratorActivity
+        generateReportButton.setOnClickListener(v -> {
+            Intent intent = new Intent(AttendanceDetailsActivity.this, ReportGeneratorActivity.class);
+            intent.putExtra("LOBBY_CODE", lobbyCode);
+            intent.putExtra("LOBBY_NAME", lobbyName != null ? lobbyName : "Unknown Lobby");
             startActivity(intent);
         });
     }

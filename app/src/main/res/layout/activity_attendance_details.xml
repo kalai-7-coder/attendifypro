@@ -17,32 +17,54 @@
         android:textColor="@color/white"
         android:layout_marginBottom="10dp"/>
 
-    <!-- Attendance Details -->
-    <TextView
-        android:id="@+id/totalEnrolledTextView"
-        android:layout_width="wrap_content"
+    <!-- Attendance Statistics Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Total Enrolled: "
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="18sp"/>
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp">
 
-    <TextView
-        android:id="@+id/presentTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="Present: "
-        android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/totalEnrolledTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Enrolled: "
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
 
+        <TextView
+            android:id="@+id/presentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_green_dark"
+            android:text="Present: "
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/absentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Absent: "
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Section Title for Student List -->
     <TextView
-        android:id="@+id/absentTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Absent: "
-        android:textColor="@color/white"
+        android:text="Student Details:"
         android:textSize="18sp"
-        android:layout_marginBottom="10dp"/>
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginBottom="8dp"/>
 
     <!-- ListView for Present Students -->
     <ListView
@@ -51,15 +73,58 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp"
+        android:background="@android:color/white"
+        android:padding="4dp"
+        android:layout_marginBottom="16dp"/>
 
-    <!-- Manage Enrolled Students -->
-    <Button
-        android:id="@+id/manageStudentsButton"
+    <!-- Action Buttons Container -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Click here to view or edit enrolled students"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"/>
+        android:orientation="vertical">
+
+        <!-- Manage Students Button -->
+        <Button
+            android:id="@+id/manageStudentsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Manage Enrolled Students"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Leave Approval Button -->
+        <Button
+            android:id="@+id/leaveApprovalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📋 Approve Leave Requests"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Security Alerts Button (NEW) -->
+        <Button
+            android:id="@+id/securityAlertsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🚨 Security Alerts"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Generate Report Button -->
+        <Button
+            android:id="@+id/generateReportButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📊 Generate Monthly Report"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@android:color/holo_green_dark"/>
+    </LinearLayout>
+
 </LinearLayout>

@@ -58,6 +58,7 @@ dependencies {
     implementation libs.androidx.biometric
     implementation libs.play.services.mlkit.face.detection
     implementation libs.firebase.storage
+    implementation libs.firebase.messaging
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core

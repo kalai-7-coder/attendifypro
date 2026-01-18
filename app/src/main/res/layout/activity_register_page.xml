@@ -1,127 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background2"
-    android:fillViewport="true"
-    tools:context=".RegisterPage">
+    android:padding="16dp"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:id="@+id/registerpage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="40dp">
+        android:gravity="center_horizontal">
 
+        <!-- Title -->
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Register"
+            android:text="Create Account"
             android:textColor="@color/white"
-            android:textSize="42sp"
-            android:textStyle="bold"/>
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="30dp"/>
 
-        <!-- Full Name Field -->
+        <!-- Name -->
         <EditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Full Name"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"
-            android:minHeight="48dp"
-            android:background="@android:color/transparent"/>
+            android:inputType="textPersonName"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
 
-        <!-- Email Field -->
+        <!-- Email -->
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"
+            android:hint="Email Address"
             android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            android:background="@android:color/transparent"
-            android:layout_marginTop="20dp"/>
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
 
-        <!-- Password Field -->
+        <!-- Password -->
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"
+            android:hint="Password (min 6 characters)"
             android:inputType="textPassword"
-            android:background="@android:color/transparent"
-            android:layout_marginTop="20dp"/>
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:layout_marginBottom="20dp"/>
 
-<!--        &lt;!&ndash; Capture Face Image Button &ndash;&gt;-->
-<!--        <Button-->
-<!--            android:id="@+id/captureFaceButton"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textStyle="bold"-->
-<!--            android:textSize="20dp"-->
-<!--            android:text="Capture Face Image"-->
-<!--            android:layout_marginTop="30dp"/>-->
+        <!-- Face Registration Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Face Registration (Optional)"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"/>
 
-<!--        &lt;!&ndash; ImageView to Show Captured Face &ndash;&gt;-->
-<!--        <ImageView-->
-<!--            android:id="@+id/facePreview"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="200dp"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:background="@color/white"-->
-<!--            android:contentDescription="Face Preview"/>-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Capture your face to enable face recognition authentication"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Face Preview -->
+        <ImageView
+            android:id="@+id/facePreview"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@android:color/white"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="Face Preview"/>
+
+        <!-- Capture Face Button -->
+        <Button
+            android:id="@+id/captureFaceButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📸 Capture Face"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:layout_marginBottom="24dp"/>
 
         <!-- Register Button -->
-        <LinearLayout
+        <Button
+            android:id="@+id/register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center">
+            android:text="Register"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
 
-            <Button
-                android:id="@+id/register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:text="Register"
-                android:textColor="@color/white"/>
-        </LinearLayout>
-
-        <!-- Already Registered Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Login Link -->
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Already Registered?"
-                android:textSize="15dp"
-                android:textColor="@color/white"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:textStyle="bold"
-                android:textSize="15dp"
-                android:textColor="@color/purple_200"
-                android:layout_marginStart="10dp"/>
-        </LinearLayout>
+            android:text="Already have an account? Login"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:focusable="true"/>
 
     </LinearLayout>
 </ScrollView>

@@ -48,6 +48,17 @@
             android:name=".ManageStudentsActivity"
             android:exported="false" />
         <activity
+            android:name=".ReportGeneratorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LeaveRequestActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".LeaveApprovalActivity"
+            android:exported="false" />
+        <activity android:name=".SecurityAlertsActivity" android:exported="false" />
+        
+        <activity
             android:name=".Dashboard"
             android:exported="false"
             android:theme="@style/Theme.AttendifyPro2" />
