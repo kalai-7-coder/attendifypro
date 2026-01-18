@@ -15,7 +15,7 @@
         android:textStyle="bold"
         android:textSize="25sp"
         android:textColor="@color/white"
-        android:text="AttendifyPro"/>
+        android:text="AttendifyPlus+"/>
 
     <TextView
         android:layout_width="match_parent"

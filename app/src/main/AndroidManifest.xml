@@ -19,7 +19,7 @@
         android:roundIcon="@drawable/attendlogo1"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AttendifyPro2"
+        android:theme="@style/Theme.AttendifyPlus"
         tools:targetApi="31">
         <activity
             android:name=".AttendanceActivity"
@@ -53,11 +53,11 @@
         <activity
             android:name=".LeaveRequestActivity"
             android:exported="false" />
-        <activity 
+        <activity
             android:name=".LeaveApprovalActivity"
             android:exported="false" />
         <activity android:name=".SecurityAlertsActivity" android:exported="false" />
-        
+
         <activity
             android:name=".Dashboard"
             android:exported="false"

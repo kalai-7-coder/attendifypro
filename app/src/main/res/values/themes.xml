@@ -2,5 +2,5 @@
 <resources>
 
 <!--    <style name="Theme.AttendifyPro2" parent="android:Theme.Material.Light.NoActionBar" />-->
-    <style name="Theme.AttendifyPro2" parent="Theme.MaterialComponents.Light.NoActionBar" />
+    <style name="Theme.AttendifyPlus" parent="Theme.MaterialComponents.Light.NoActionBar" />
 </resources>
